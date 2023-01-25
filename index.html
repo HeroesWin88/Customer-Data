@@ -7,6 +7,8 @@
   <form id="customer-form">
     <label for="first-name">First Name:</label>
     <input type="text" id="first-name" name="first-name"><br>
+    <label for="middle-name">Middle Name:</label>
+    <input type="text" id="middle-name" name="middle-name"><br>
     <label for="last-name">Last Name:</label>
     <input type="text" id="last-name" name="last-name"><br>
     <label for="dob">Date of Birth:</label>
@@ -15,6 +17,14 @@
     <input type="text" id="ssn" name="ssn"><br>
     <label for="address">Address:</label>
     <input type="text" id="address" name="address"><br>
+    <label for="city">City:</label>
+    <input type="text" id="city" name="city"><br>
+    <label for="state">State:</label>
+    <input type="text" id="state" name="state"><br>
+    <label for="zip-code">Zip Code:</label>
+    <input type="text" id="zip-code" name="zip-code"><br>
+    <label for="phone-number">Phone Number:</label>
+    <input type="text" id="phone-number" name="phone-number"><br>
     <label for="email">Email:</label>
     <input type="text" id="email" name="email"><br>
     <label for="username">Username:</label>
@@ -37,24 +47,36 @@
     function saveData() {
       // Get the customer data from the form
       var firstName = document.getElementById("first-name").value;
-      var lastName = document.getElementById("last-name").value;
-      var dob = document.getElementById("dob").value;
-      var ssn = document.getElementById("ssn").value;
-      var address = document.getElementById("address").value;
-      var email = document.getElementById("email").value;
-      var username = document.getElementById("username").value;
-      var password = document.getElementById("password").value;
-      var creditCardNumber = document.getElementById("credit-card-number").value;
-      var ccv = document.getElementById("ccv").value;
-      var bankAccount = document.getElementById("bank-account").value;
-      var routingNumber = document.getElementById("routing-number").value;
+      var middleName = document.getElementById("middle-name").value;
+      var lastName =
+
+document.getElementById("last-name").value;
+var dob = document.getElementById("dob").value;
+var ssn = document.getElementById("ssn").value;
+var address = document.getElementById("address").value;
+var city = document.getElementById("city").value;
+var state = document.getElementById("state").value;
+var zipCode = document.getElementById("zip-code").value;
+var phoneNumber = document.getElementById("phone-number").value;
+var email = document.getElementById("email").value;
+var username = document.getElementById("username").value;
+var password = document.getElementById("password").value;
+var creditCardNumber = document.getElementById("credit-card-number").value;
+var ccv = document.getElementById("ccv").value;
+var bankAccount = document.getElementById("bank-account").value;
+var routingNumber = document.getElementById("routing-number").value;
   // Create a JSON object with the customer data
   var customerData = {
     "firstName": firstName,
+    "middleName": middleName,
     "lastName": lastName,
     "dob": dob,
     "ssn": ssn,
     "address": address,
+    "city": city,
+    "state": state,
+    "zipCode": zipCode,
+    "phoneNumber": phoneNumber,
     "email": email,
     "username": username,
     "password": password,
@@ -70,43 +92,23 @@
   // Create a new Blob with the customer data string as its content
   var customerDataBlob = new Blob([customerDataString], { type: "application/json" });
 
-  // Create a link element and trigger a click event to open the "Save As" dialog
-  var link = document.createElement("a");
-  link.download = "customer-data.json";
-  link.href = URL.createObjectURL(customerDataBlob);
-  link.click();
-}
+  // Create a new File with the customer's name as the name of the file and the Blob as its content
+  var customerName = lastName + "_" + firstName;
+  var customerDataFile = new File([customerDataBlob], customerName, { type: "application/json" });
 
+  // Save the File
+  saveAs(customerDataFile);
+}
 function uploadData() {
-  // Get the selected file from the file input
   var fileInput = document.getElementById("file-input");
   var file = fileInput.files[0];
-
-  // Create a FileReader to read the contents of the file
-  var fileReader = new FileReader();
-  fileReader.onload = function() {
-    // Parse the contents of the file as JSON
-    var customerData = JSON.parse(fileReader.result);
-
-    // Populate the form with the customer data
-    document.getElementById("first-name").value = customerData.firstName;
-    document.getElementById("last-name").value = customerData.lastName;
-    document.getElementById("dob").value = customerData.dob;
-    document.getElementById("ssn").value = customerData.ssn;
-    document.getElementById("address").value = customerData.address;
-    document.getElementById("email").value = customerData.email;
-    document.getElementById("username").value = customerData.username;
-    document.getElementById("password").value = customerData.password;
-    document.getElementById("credit-card-number").value = customerData.creditCardNumber;
-    document.getElementById("ccv").value = customerData.ccv;
-    document.getElementById("bank-account").value = customerData.bankAccount;
-    document.getElementById("routing-number").value = customerData.routingNumber;
-  }
-
-  // Read the contents of the file as a text string
-  fileReader.readAsText(file);
+  var reader = new FileReader();
+  reader.readAsText(file);
+  reader.onload = function() {
+    var customerData = JSON.parse(reader.result);
+    console.log(customerData);
+  };
 }
-
  </script>
 </body>
 </html>
